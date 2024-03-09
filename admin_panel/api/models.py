@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 import os
-
+from django.conf import settings
 from rest_framework.fields import uuid
 
 
@@ -18,12 +18,12 @@ class Book(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to="books_images/")
     category = models.ForeignKey(BookCategory, models.CASCADE)
-
     def save(self, *args, **kwargs):
         if self.image:
             unique_code = uuid.uuid4().hex[:8]
-            file_extension = os.path.splitext(self.image.name)
-            new_filename = f"book_{self.name}_{unique_code}{file_extension[-1]}"
+            file_extension = os.path.splitext(self.image.name)[-1]
+            new_filename = f"book_{self.name}_{unique_code}{file_extension}"
+            # new_filename = os.path.join(settings.MEDIA_ROOT, new_filename)
             self.image.name = new_filename
         super(Book, self).save(*args, **kwargs)
 
@@ -33,4 +33,4 @@ class Book(models.Model):
 
 @receiver(pre_save, sender=BookCategory)
 def category_save(sender, instance, **kwargs):
-    pass
+    instance.name = instance.name().lower()

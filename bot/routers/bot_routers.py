@@ -1,8 +1,9 @@
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import FSInputFile, InputFile, Message
+from aiogram.utils.media_group import MediaGroupBuilder
 from keyboards.bot_kb import Keyboards  # pyright:ignore
-from create_bot import BOT_PATH  # pyright:ignore
+from create_bot import BOT_PATH, bot  # pyright:ignore
 import requests
 import os
 
@@ -34,9 +35,6 @@ async def command_random_book(message: Message):
     response = requests.get("http://127.0.0.1:8000/api/random-book/")
     if response.status_code == 200:
         book = response.json()[0]
-        image_path = os.path.join(BOT_PATH, book["image"])
-        file_path = BOT_PATH[:-4] + book["image"]
-        print(file_path)
-        # дjбавить в модели джанго чтобы в image поле были абсолютные пути
-
-        # await message.reply_photo(file)
+        book_image = book["image"]
+        file = FSInputFile(os.path.join(os.getcwd()[:-4],"admin_panel","books_images",book_image[14:]),filename=book_image[14:])
+        await message.answer_photo(photo=file,caption="caption")
