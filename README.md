@@ -2,8 +2,6 @@
 
 # Greeting and Start:
     Upon the /start command, the bot greets the user and offers to begin using the bot.
-# List of Books:
-    Upon the /books_list command, the bot displays a list of books.
 # Random Book:
     With the /random_book command, the bot sends a randomly selected book.
 # Books by Categories:

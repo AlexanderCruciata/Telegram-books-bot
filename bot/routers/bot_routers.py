@@ -17,16 +17,6 @@ async def command_start(message: Message):
         reply_markup=await keyboards.user_keyboard(),
     )
 
-
-@router.message(Command("books_list"))
-async def command_books_list(message: Message):
-    response = requests.get("http://127.0.0.1:8000/api/books-list/")
-    if response.status_code == 200:
-        for book in response.json():
-            print(book)
-            await message.answer(book["name"])
-
-
 @router.message(Command("random_book"))
 async def command_random_book(message: Message):
     response = requests.get("http://127.0.0.1:8000/api/random-book/")

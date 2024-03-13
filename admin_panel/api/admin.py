@@ -1,5 +1,15 @@
 from django.contrib import admin
 from .models import BookCategory, Book
 
-admin.site.register(Book)
-admin.site.register(BookCategory)
+
+class BookAdminModel(admin.ModelAdmin):
+    list_display = ("name", "image")
+    search_fields = ("name",)
+
+
+class BookCategoryModel(admin.ModelAdmin):
+    search_fields = ("category_name",)
+
+
+admin.site.register(Book, BookAdminModel)
+admin.site.register(BookCategory, BookCategoryModel)
